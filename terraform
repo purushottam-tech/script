@@ -1,1 +1,117 @@
+=============================
+TERRAFORM
+=================================
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "one" {
+  count         = 3
+  ami           = "ami-080b1a55a0ad28c02"
+  instance_type = "t2.micro"
+  tags = {
+    name = "dev-server-${count.index+1}"
+  }
+}
+==============================================
+terraform init
+terraform plan
+terraform apply -auto-approve
+terraform destroy -auto-approve
+=================================================
+TERRAFORM VARIABLE
+==================================================
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "one" {
+  count         = var.instance_count
+  ami           = "ami-080b1a55a0ad28c02"
+  instance_type = var.instance_type
+  tags = {
+    Name = var.instance_name
+  }
+}
+
+variable "instance_count" {
+  default = 5
+}
+
+variable "instance_type" {
+  default = "t2.micro"
+}
+variable "instance_name" {
+  default = "dev-server"
+}
+===========================================
+TERRAFORM TFVARS
+===========================================
+main.tf
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "one" {
+  count         = var.instance_count
+  ami           = "ami-080b1a55a0ad28c02"
+  instance_type = var.instance_type
+  tags = {
+    Name = var.instance_name
+  }
+}
+
+variable.tf
+variable "instance_count" {
+}
+
+variable "instance_type" {
+}
+
+variable "instance_name" {
+}
+
+dev.tfvars/test.tfvars/prod.tfvars
+instance_count = 1
+
+instance_type = "t2.micro"
+
+instance_name = "dev-server"
+=====================================================
+TERRAFORM LOCALS
+======================================================
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+locals {
+  env = "test"
+}
+
+resource "aws_vpc" "one" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "${local.env}-vpc"
+  }
+}
+
+resource "aws_subnet" "two" {
+  vpc_id     = aws_vpc.one.id
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "${local.env}-subnet"
+  }
+}
+
+resource "aws_instance" "three" {
+  subnet_id     = aws_subnet.two.id
+  ami           = "ami-080b1a55a0ad28c02"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "${local.env}-server"
+  }
+}
+=========================================================
 
