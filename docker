@@ -45,3 +45,24 @@ RUN yum install httpd -y
 COPY index.html /var/www/html
 CMD ["usr/sbin/httpd", "-D", "FOREGROUND"]
 ===========================================================================
+DOCKER-COMPOSE
+
+version: '3.8'
+services:
+  movies:
+    image: movies:v1
+    ports:
+      - "81:80"
+  train:
+    image: train:v1
+    ports:
+      - "82:80"
+  recharge:
+    image: recharge:v1
+    ports:
+      - "83:80"
+  dth:
+    image: dth:v1
+    ports:
+      - "84:80"
+===================================================================
