@@ -87,3 +87,8 @@ DOCKER-HUB
 docker tag movies:v1 purushottambawane35/movies
 docker login
 docker push purushottambawane35/movies
+
+docker pull purushottambawane35/movies:latest
+docker run -itd --name cont4 -p 81:80 purushottambawane35/movies
+
+
