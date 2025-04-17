@@ -46,6 +46,7 @@ COPY index.html /var/www/html
 CMD ["usr/sbin/httpd", "-D", "FOREGROUND"]
 ===========================================================================
 DOCKER-COMPOSE
+(DOWNLOAD DOCKER-COMPOSE SCRIPT)
 
 version: '3.8'
 services:
@@ -90,5 +91,7 @@ docker push purushottambawane35/movies
 
 docker pull purushottambawane35/movies:latest
 docker run -itd --name cont4 -p 81:80 purushottambawane35/movies
+===========================================================================
+
 
 
