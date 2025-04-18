@@ -92,6 +92,52 @@ docker push purushottambawane35/movies
 docker pull purushottambawane35/movies:latest
 docker run -itd --name cont4 -p 81:80 purushottambawane35/movies
 ===========================================================================
+DOCKER-SWARM
 
+SETUP:
+create 3 servers
+install docker and start the service
+hostnamectl set-hostname manager/worker-1/worker-2
+Enable 2377 port 
 
+docker swarm init (manager) 
+docker node ls
 
+SERVICE: 
+
+docker service create --name movies --replicas 3 -p 81:80 purushottambawane35/movies:latest
+docker service ls		: to list services
+docker service inspect movies	: to get complete info of service
+docker service ps movies	: to list the containers of movies
+docker service scale movies=10	: to scale in the containers
+docker service scale movies=3	: to scale out the containers
+docker service rollback movies	: to go previous state
+docker service logs movies	: to see the logs
+docker service rm movies	: to delete the services.
+===============================================================================================
+CLUSTER ACTIVIES:
+docker swarm leave (worker)	: to make node inactive from cluster
+To activate the node copy the token.
+docker node rm node-id (manager): to delete worker node which is on down state
+docker node inspect node_id	: to get comple info of worker node
+docker swarm join-token manager	: to generate the token to join
+===========================================================================================
+DOCKER NETWORKING:
+We have different types of docker networks.
+Bridge Network		: SAME HOST
+Overlay network		: DIFFERENT HOST
+Host Network
+None network
+
+To create a network: docker network create network_name
+To see the list: docker network ls
+To delete a network: docker network rm network_name
+To inspect: docker network inspect network_name
+To connect a container to the network: docker network connect network_name container_id/name
+docker exec -it cont1 container_name /bin/bash
+apt update
+apt install iputils-ping -y : command to install ping checks
+ping ip-address of cont2
+
+To disconnect from the container: docker network disconnect network_name container_name
+To prune: docker network prune
