@@ -141,3 +141,5 @@ ping ip-address of cont2
 
 To disconnect from the container: docker network disconnect network_name container_name
 To prune: docker network prune
+==========================================================================================
+docker run -it --name jenkins -p 8080:8080 jenkins/jenkins:lts
