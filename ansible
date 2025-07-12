@@ -1,1 +1,198 @@
+ARCHITECTURE:
+==============
+PLAYBOOK  : its a file which consist of code
+INVENTORY : its a file which consist ip of nodes
+SSH       : used to connect with nodes
+Ansible   : Agent less. Means no need to install any software on worker nodes.
 
+SETUP:
+=======
+CREATE SERVERS = 3
+
+EXECUTE THE BELOW COMMANDS ON ALL SERVERS:
+sudo -i
+hostnamectl set-hostname (#ansible/dev-1/test-1)
+sudo -i
+passwd root  (#to login to other servers)
+vim /etc/ssh/sshd_config (#38 & 61 uncomment both lines) 
+systemctl restart sshd
+systemctl status sshd
+hostname -i
+
+THE BELOW STEPS NEED TO BE RUN ON ANSIBLE SERVER:
+amazon-linux-extras install ansible2 -y
+yum install python3 python-pip python-dlevel -y
+
+vim /etc/ansible/hosts
+[dev]
+172.31.20.40
+[test]
+172.31.31.77
+
+ssh-keygen (#enter 4 times)
+ssh-copy-id root@private ip of dev-1 -- > yes -- > password -- > ssh private ip -- > ctrl d
+ssh-copy-id root@private ip of test-1 -- > yes -- > password -- > ssh private ip -- > ctrl d
+ansible all -m ping (#To check worker node connection with ansible server)
+
+ADHOC COMMANDS
+======================================
+ansible all -a "yum install git -y"
+ansible all -a "yum install maven -y"
+ansible all -a "mvn --version"
+ansible all -a "touch file1"
+ansible all -a "touch raham.txt"
+ansible all -a "ls"
+ansible all -a "yum install httpd -y"
+ansible all -a "systemctl status httpd"
+ansible all -a "systemctl start httpd"
+ansible all -a "user add raham"
+ansible all -a "cat /etc/passwd"
+ansible all -a "yum remove git* maven* httpd* -y"
+
+MODULES:
+==============
+ansible all -m yum -a "name=git state=present"
+ansible all -m yum -a "name=maven state=present"	[present=installed]
+ansible all -m service -a "name=httpd state=started"	[started=restart]
+ansible all -m service -a "name=httpd state=stopped"	[stopped=stop]
+ansible all -m yum -a "name=http state=absent"		[absent=uninstall]
+ansible all -m user -a "name=vikram state=present"
+ansible all -m user -a "name=vikram state=absent"
+ansible all -m copy -a "src=raham.txt dest=/tmp"
+
+ PLAYBOOKS:
+================
+EX-1:
+=====
+-hosts: all
+task:
+  - name: task-1
+    yum: name=maven state=present
+    when: ansible_os_family == "RedHat"
+  - name: task-2
+    apt: name=maven state=present
+    when: ansible_os_family == "ubuntu"
+
+ansible-palybook.raham.yml
+
+EX-2:
+=====
+- hosts: all
+  tasks:
+    - name: installing git
+      yum: name=git state=present
+
+    - name: installing httpd
+      yum: name=httpd state=present
+
+
+EX-3:
+=====
+hosts: all
+  ignore_errors: true
+  tasks:
+    - name: installing git
+      yum: name=git state=absent
+
+    - name: installing httpd
+      yum: name=httpd state=absent
+
+SETUP MODULE:
+================
+used to print the complete info of worker nodes
+ansible all -m setup 
+
+ansible all -m setup  | grep -i family
+ansible all -m setup  | grep -i pkg
+ansible all -m setup  | grep -i cores
+
+TAGS:
+============
+by deafult ansible will execute all tasks sequentially in a playbook.
+we can use tags to execute a specific tasks or to skip a specific tasks.
+
+- hosts: all
+  ignore_errors: yes
+  tasks:
+    - name: installing git
+      yum: name=git state=present
+      tags: a
+
+    - name: installing httpd
+      yum: name=httpd state=present
+      tags: b
+
+    - name: starting httpd
+      service: name=httpd state=started
+      tags: c
+
+    - name: create a user
+      user: name=kohli state=present
+      tags: d
+
+    - name: copy a file
+      copy: src=index.html dest=/tmp
+      tags: e
+
+SINGLE TAG: ansible-playbook raham.yml --tags d
+MULTI TAGS: ansible-playbook raham.yml --tags b,c
+
+VARIABLES:
+==============
+STATIC VARS: vars inside the playbook
+============
+- hosts: all
+  vars:
+    a: maven
+    b: httpd
+  tasks:
+    - name: installing maven
+      yum: name={{a}} state=present
+    - name: installing httpd
+      yum: name={{b}} state=present
+
+DYNAMIC VARS: vars outside the playbook a
+=============
+- hosts: all
+  vars:
+  tasks:
+    - name: installing maven
+      yum: name={{a}} state=absent
+    - name: installing httpd
+      yum: name={{b}} state=absent
+
+ansible-playbook raham.yml --extra-vars "a=docker b=httpd"
+
+LOOPS: 
+=========
+- hosts: all
+  tasks:
+    - name: installing pkg
+      yum: name={{item}} state=present
+      with_items:
+        - git
+        - java
+        - maven
+        - docker
+        - httpd
+
+
+ansible all -a "git -v"
+ansible all -a "java -v"
+ansible all -a "maven -v"
+ansible all -a "docker -v"
+ansible all -a "httpd -v"
+
+- hosts: all
+  tasks:
+    - name: creating users
+      user: name={{item}} state=present
+      with_items:
+        - ravi
+        - shiva
+        - rajesh
+        - shivani
+        - luckyy
+
+DEBUG
+=======
