@@ -237,3 +237,13 @@ cat raham.yml
 
 ansible-playbook raham.yml
 
+STRATAGIES: Way of executing the playbook.
+===============================
+
+LINEAR: execute tasks sequentially 
+        if task-1 is executed on server-1 it will wait till task-2 execution
+FREE:   execute all tasks on all node at same time
+        if task-1 is executed on server-1 it wont wait till task-2 execution
+ROLLING:
+BATCH:
+
