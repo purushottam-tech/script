@@ -196,3 +196,44 @@ ansible all -a "httpd -v"
 
 DEBUG
 =======
+debug = print the information
+setup = give all information from worknode
+
+ansible all -m setup
+
+NAME	: ansible_nodename
+FAMILY  : ansible_os_family
+PKG	: ansible_pkg_mgr
+CPU	: ansible_processor_cores
+MEM	: ansible_memtotal_mb
+FREE	: ansible_memfree_mb
+
+- hosts: all
+  tasks:
+    - name: printing a msg
+      debug:
+        msg: "server name is: {{ansible_nodename}},
+              it belongs to: {{ansible_os_family}},
+              package maneger is: {{ansible_pkg_mgr}},
+              cpu comsumed is: {{ansible_processor_cores}},
+              total ram is: {{ansible_memtotal_mb}},
+              free ram available is: {{ansible_memfree_mb}}"
+
+LOOKUPS
+=========
+extract the data from files, db and key values
+
+- hosts: dev
+  vars:
+    a: "{{lookup('file', '/root/creds.txt') }}"
+  tasks:
+    - debug:
+        msg: "hai my user name is {{a}}"
+
+cat creds.txt
+user=raham
+password=test123
+cat raham.yml
+
+ansible-playbook raham.yml
+
