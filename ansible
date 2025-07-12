@@ -247,3 +247,51 @@ FREE:   execute all tasks on all node at same time
 ROLLING:
 BATCH:
 
+ROLES
+========
+mkdir playbooks
+cd playbooks/
+
+mkdir -p roles/pkgs/tasks
+vim roles/pkgs/tasks/main.yml
+
+- name: installing pkgs
+  yum: name=git state=present
+- name: install maven
+  yum: name=maven state=present
+- name: installing docker
+  yum: name=docker state=present
+
+mkdir -p roles/users/tasks
+vim roles/users/tasks/main.yml
+
+- name: create users
+  user: name={{item}} state=present
+  with_items:
+    - uday
+    - naveen
+    - rohit
+    - lokesh
+    - saipallavi
+    - supriya
+
+mkdir -p roles/webserver/tasks
+vim roles/web/tasks/main.yml
+
+- name: installing httpd
+  yum: name=httpd state=present
+
+- name: starting httpd
+  service: name=httpd state=started
+
+cat master.yml
+
+- hosts: all
+  roles:
+    - pkgs
+    - users
+    - webserver
+
+find . -type f -exec sed -i 's/present/absent/g' {} \;
+
+
