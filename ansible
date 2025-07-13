@@ -396,3 +396,5 @@ vim tomcat.yml
 
 vim context.yml
 use script
+
+ansible-playbook tomcat.yml
