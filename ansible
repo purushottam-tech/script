@@ -329,5 +329,32 @@ python: pip
 
     - name: installing Pandas
       pip: name=Pandas state=present
+=================================================================================
+POJECT-FRONTEND NETFLIX-CLONE
+=====================================================================================
+
+WEB SERVER : TO SHOW THE APP : httpd   : 80    : /var/www/html    : frontend code
+APP SERVER : TO USE THE APP  : Tomcat  : 8080  : tomcat/webapps   : frontend code + backend code
+
+- hosts: all
+  tasks:
+    - name: installing httpd
+      yum: name=httpd state=present
+
+    - name: starting httpd
+      service: name=httpd state=started
+
+    - name: installing git
+      yum: name=git state=present
+
+    - name: checkout git
+      git:
+        repo: https://github.com/purushottam-tech/netflix-clone.git
+        dest: /var/www/html
+
+ansible-playbook deploy.yml
+
+
+
 
 
