@@ -354,6 +354,44 @@ APP SERVER : TO USE THE APP  : Tomcat  : 8080  : tomcat/webapps   : frontend cod
 
 ansible-playbook deploy.yml
 
+===============================================================================
+PROJECT-FORNTEND-BACKEND ANSIBLE 
+================================================================================
+ansible-server
+
+vim tomcat.yml
+
+- hosts: all
+  tasks:
+    - name: download tomcat from downloads
+      get_url:
+        url: "https://downloads.apache.org/tomcat/tomcat-9/v9.0.107/bin/apache-tomcat-9.0.107.tar.gz"
+        dest: "/root/"
+
+    - name: untar the apache file
+      command: tar -zxvf apache-tomcat-9.0.107.tar.gz
+
+
+    - name: rename the tomcat
+      command: mv apache-tomcat-9.0.107 tomcat
+      tags: abc
+
+   - name: install java
+     command: yum install java-1.8.0-openjdk -y
+
+
+    - name: setting the roles in tomcat-user.xml file
+      template:
+        src: tomcat-users.xml
+        dest: /root/tomcat/conf/tomcat-users.xml
+
+    - name: delete two lines in context.xml
+      template:
+        src: context.xml
+        dest: /root/tomcat/webapps/manager/META-INF/context.xml
+
+    - name: start the tomcat
+      shell: nohup /root/tomcat/bin/startup.sh
 
 
 
