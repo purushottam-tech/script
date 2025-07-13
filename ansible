@@ -294,4 +294,40 @@ cat master.yml
 
 find . -type f -exec sed -i 's/present/absent/g' {} \;
 
+ANSIBLE VAULT:
+================
+it is used to encrypt the files, playbooks ----
+Technique: AES256 (USED BY FACEBOOK, AWS)
+vault will store our data very safely and securely.
+if we want to access any data which is in the vault we need to give a password.
+Note: we can restrict the users to access the playbook also.
+
+cat creds.txt
+user=raham
+passowrd=test123
+
+ansible-vault create creds1.txt		: to create a vault
+ansible-vault edit creds1.txt		: to edit a vault
+ansible-vault rekey creds1.txt		: to change password for a vault
+ansible-vault decrypt creds1.txt	: to decrypt the content	
+ansible-vault encrypt creds1.txt	: to encrypt the content	
+ansible-vault view creds1.txt		: to show the content without decrypt
+
+PIP: its a pkg manager used to install python libs/modules
+============================================================
+Redhat: yum
+ubuntu: apt
+python: pip
+
+- hosts: all
+  tasks:
+    - name: install pip
+      yum: name=pip state=present
+
+    - name: installing NumPy
+      pip: name=NumPy state=present
+
+    - name: installing Pandas
+      pip: name=Pandas state=present
+
 
