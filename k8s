@@ -80,6 +80,7 @@ to get lables of pods 	: kubectl get pods -l app=paytm
 TO scale rs		          : kubectl scale rs/movies --replicas=10 (LIFO)
 
 DRAWBACK: it won't update the application & rollin & rollout
+------------------------------------------------------------
 
 kubectl describe po | grep -i image
 kubectl edit rs/movies
@@ -107,6 +108,24 @@ spec:
         - name: cont1
           image: purushottambawane805/moviesrepo:latest
 
+To list deploy		          : kubectl get deploy
+To show addtional info	    : kubectl get deploy -o wide
+To show complete info 	    : kubectl describe deploy movies
+To delete the deploy	      : kubectl delete deploy movies
+to get lables of pods 	    : kubectl get pods -l app=paytm
+TO scale deploy		          : kubectl scale deploy/movies --replicas=10 (LIFO)
+To show all pod labels	    : kubectl get pods --show-labels
+To delete all pods	        : kubectl delete pod --all
+
+kubectl describe po | grep -i image
+kubectl edit deploy/movies
+kubectl describe po | grep -i image
+
+kubectl rollout history deploy/movies
+kubectl rollout undo deploy/movies
+kubectl rollout status deploy/movies
+kubectl rollout pause deploy/movies
+kubectl rollout resume deploy/movies
 
 
 
