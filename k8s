@@ -40,8 +40,9 @@ metadata:
   name: pod1
 spec:
   containers:
-    - image: purushottambawane805/moviesrepo:latest
-      name: cont1
+    - name: cont1
+      image: purushottambawane805/moviesrepo:latest
+
 
 kubectl create -f pod.yml
 
