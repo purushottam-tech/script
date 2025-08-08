@@ -25,7 +25,7 @@ Imperative (command)
 Declarative (manifest file)
 
 IMPERATIVE:
-kubectl run pod1 --image vinodvanama/paytmmovies:latest
+kubectl run pod1 --image purushottambawane805/mmoviesrepo:latest
 kubectl get pods/pod/po
 kubectl get pod -o wide
 kubectl describe pod pod1
@@ -43,6 +43,42 @@ spec:
     - name: cont1
       image: purushottambawane805/moviesrepo:latest
 
-
+execution: 
 kubectl create -f pod.yml
+kubectl get pods/pod/po
+kubectl get pod -o wide
+kubectl describe pod pod1
+kubectl delete -f raham.yml
+
+REPLICASET
+=================
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: movies
+  labels:
+    app: paytm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: paytm
+  template:
+    metadata:
+      labels:
+        app: paytm
+    spec:
+      containers:
+        - name: cont1
+          image: purushottambawane805/moviesrepo:latest
+
+To list rs		          : kubectl get rs
+To show addtional info	: kubectl get rs -o wide
+To show complete info 	: kubectl describe rs movies
+To delete the rs	      : kubectl delete rs movies
+to get lables of pods 	: kubectl get pods -l app=paytm
+TO scale rs		          : kubectl scale rs/movies --replicas=10 (LIFO)
+
+DRAWBACK: it won't update the application & rollin & rollout
+
 
