@@ -81,7 +81,31 @@ TO scale rs		          : kubectl scale rs/movies --replicas=10 (LIFO)
 
 DRAWBACK: it won't update the application & rollin & rollout
 
-kubectl  describe po | grep -i image
+kubectl describe po | grep -i image
+kubectl edit rs/movies
+kubectl describe po | grep -i image
+
+DEPLOYMENT
+==================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies
+  labels:
+    app: paytm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: paytm
+  template:
+    metadata:
+      labels:
+        app: paytm
+    spec:
+      containers:
+        - name: cont1
+          image: purushottambawane805/moviesrepo:latest
 
 
 
