@@ -132,7 +132,13 @@ KOPS (Kubernetes operations)
 
 STEP-1: GIVING PERMISSIONS
         IAM -- > USER -- > CREATE USER -- > NAME: KOPS -- > Attach Polocies Directly -- > AdministratorAccess -- > NEXT -- > CREATE USER
-        USER -- > SECURTITY CREDENTIALS -- > CREATE ACCESS KEYS -- > CLI -- > CHECKBOX -- >  CREATE ACCESS KEYS -- > DOWNLOAD 
+        USER -- > SECURTITY CREDENTIALS -- > CREATE ACCESS KEYS -- > CLI -- > CHECKBOX -- >  CREATE ACCESS KEYS -- > DOWNLOAD
+
+        aws confiure
+        aws access key (copy)
+        aws secreat key (copy)
+        ap-south-01
+        table
 
 STEP-2: INSTALL KUBECTL AND KOPS
         curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
