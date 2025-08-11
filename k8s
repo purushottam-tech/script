@@ -126,7 +126,7 @@ kubectl rollout undo deploy/movies
 kubectl rollout status deploy/movies
 kubectl rollout pause deploy/movies
 kubectl rollout resume deploy/movies
-
+======================================================================================================================================
 KOPS (Kubernetes operations)
 =======================================================================================================================================
 
