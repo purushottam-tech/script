@@ -156,11 +156,11 @@ STEP-2: INSTALL KUBECTL AND KOPS
 
 STEP-3: CREATING BUCKET 
         aws s3api create-bucket \
-        --bucket devopsbatchapr600pm77678dope.k8s.local \
+        --bucket devopsbatchapr600pm776789dope.k8s.local \
         --region ap-south-1 \
         --create-bucket-configuration LocationConstraint=ap-south-1
-        aws s3api get-bucket-versioning --bucket devopsbatchapr600pm77678dope.k8s.local --region ap-south-1 
-        export KOPS_STATE_STORE=s3://devopsbatchapr600pm77678dope.k8s.local
+        aws s3api get-bucket-versioning --bucket devopsbatchapr600pm776789dope.k8s.local --region ap-south-1 
+        export KOPS_STATE_STORE=s3://devopsbatchapr600pm776789dope.k8s.local
 
 STEP-4: CREATING THE CLUSTER
         kops create cluster --name purushottam.k8s.local --zones ap-south-1b --master-count=1 --master-size t3.medium --node-count=2 --node-size t3.micro
