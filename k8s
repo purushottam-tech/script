@@ -345,5 +345,7 @@ AUTOSCALING
 1) HPA = web & apps server (New)
 2) VPA = database server (existing)
 
+while creatng HPA & VPA we need to install metrix server (wait 15 sec)
+
 
 
