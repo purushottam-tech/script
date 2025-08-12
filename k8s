@@ -340,7 +340,10 @@ spec:
       targetPort: 80
 
 
-
+AUTOSCALING
+==================
+1) HPA = web & apps server (New)
+2) VPA = database server (existing)
 
 
 
