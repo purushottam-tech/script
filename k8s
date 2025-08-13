@@ -506,7 +506,77 @@ spec:
 
 kubectl apply -f deploy.yml
 
+PV-PVC
+============================
+pv.yml
 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  awsElasticBlockStore:
+    volumeID: vol-0bc873ea0ae1c7f35
+    fsType: ext4
+
+kubectl create -f pv.yml
+kubectl get pv
+
+pvc.yml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+kubectl create -f pvc.yml
+kubectl get pvc
+
+dep.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pvdeploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: paytm
+  template:
+    metadata:
+      labels:
+        app: paytm
+    spec:
+      containers:
+      - name: cont1
+        image: purushottambawane805/moviesrepo:latest
+        command: ["/bin/bash", "-c", "sleep 10000"]
+        volumeMounts:
+        - name: my-pv
+          mountPath: "/tmp/persistent"
+      volumes:
+        - name: my-pv
+          persistentVolumeClaim:
+            claimName: my-pvc
+
+kubectl create -f deploy.yml
+kubectl get deploy
+kubectl get po
+kubectl describe deploy pvdeploy
+kubectl describe po
+
+kubectl exec -it pvdeploy-5f5ffc94-qkd49 -- /bin/bash
 
 
 
