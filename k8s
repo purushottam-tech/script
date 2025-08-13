@@ -208,6 +208,9 @@ kubectl delete pod --all                                           : to delete a
 
 
 DAEMONSET:
+=======================
+vim deploy.yml
+
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -229,9 +232,13 @@ spec:
         ports:
           - containerPort: 80
 
+kubectl create -f deploy.yml
+
 
 SERVICE:
 =================
+CLUSTERIP
+----------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -304,7 +311,8 @@ spec:
     - port: 80
       nodePort: 31111
 
-LOADBALACER: 
+LOADBALACER:
+--------------------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -340,7 +348,7 @@ spec:
       targetPort: 80
 
 
-AUTOSCALING
+METRIX SERVER -(AUTOSCALING)
 ==================
 1) HPA = web & apps server (New)
 2) VPA = database server (existing)
@@ -349,13 +357,157 @@ FOR MINIKUBE:
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 minikube addons enable metrics-server #(only for minikube)
 
-kubectl top nodes
-kubectl top pods
-
 FOR KOPS:
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/high-availability-1.21+.yaml
 
-while creatng HPA & VPA we need to install metrix server (wait 15 sec)
+vim deploy.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies
+  labels:
+    app: paytm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: paytm
+  template:
+    metadata:
+      labels:
+        app: paytm
+    spec:
+      containers:
+        - name: cont1
+          image: purushottambawane805/moviesrepo:latest
+
+kubectl apply -f deploy.yml
+kubectl get all
+kubectl get deploy 
+kubectl autoscale deployment movies --cpu-percent=20 --min=1 --max=10
+kubectl get hpa
+kubectl desribe hpa movies
+kubectl get all
+
+open second terminal and give
+kubectl get po --watch
+
+come to first terminal and go inside pod
+kubectl exec mydeploy-6bd88977d5-7s6t8 -it -- /bin/bash
+
+apt update -y
+apt install stress -y
+stress 
+
+check terminal two to see live pods
+
+
+QUOTAS
+=====================
+kubectl get ns
+kubectl create ns dev
+kubectl get ns
+kubectl config set-context --current --namespace=dev
+kubectl config view
+
+vim quotas.yml
+
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: dev-quota
+  namespace: dev
+spec:
+  hard:
+    pods: "5"
+    limits.cpu: "1"
+    limits.memory: 1Gi
+
+kubectl create -f quotas.yml
+kubectl get quota
+
+EX-1
+-------
+ vim deploy.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies
+  labels:
+    app: paytm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: paytm
+  template:
+    metadata:
+      labels:
+        app: paytm
+    spec:
+      containers:
+        - name: cont1
+          image: purushottambawane805/moviesrepo:latest
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+
+kubectl create -f dep.yml
+kubectl get quota
+kubectl get deploy
+kubectl get po
+
+Ex-2
+----------
+vim quotas.yml
+
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: dev-quota
+  namespace: dev
+spec:
+  hard:
+    pods: "5"
+    limits.cpu: "2"
+    limits.memory: 2Gi
+
+kubectl apply -f quotas.yml
+kubectl get quota
+
+vim deploy.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies
+  labels:
+    app: paytm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: paytm
+  template:
+    metadata:
+      labels:
+        app: paytm
+    spec:
+      containers:
+        - name: cont1
+          image: purushottambawane805/moviesrepo:latest
+          resources:
+            limits:
+              cpu: "0.3"
+              memory: 200Mi
+
+kubectl apply -f deploy.yml
+
+
+
 
 
 
