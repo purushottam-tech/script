@@ -596,6 +596,7 @@ vim varsfile
 MYSQL_ROOT_PASSWORD=Puru123
 MYSQL_USER=admin
 
+kubectl create deploy swiggydb --image=mariadb
 kubectl create cm dbvars --from-env-file=varsfile
 kubectl describe cm dbvars
 kubectl get po (showing crashllookup)
@@ -619,6 +620,14 @@ kubectl describe secret password
 kubectl get po
 kubectl set env deploy swiggydb --from=secret/password
 kubectl get po
+
+kubectl get secrets password -o yaml
+bese64 decode
+echo -n "cHVydTEyMw==" | base64 -d
+
+kubectl delete secret password
+kubectl delete cm dbvars
+kubectl delete deploy swiggydb
 
  
 
