@@ -630,5 +630,21 @@ kubectl delete cm dbvars
 kubectl delete deploy swiggydb
 
  
+DRAIN-CORDON (cluster updating procees)
+===========================
+vim kops.sh
+sh kops.sh
+kubectl get nodes
+vim deploy.yml
+kubectl create -f deploy.yml
+kubectl get po -o wide
+kubectl get nodes
+kubectl drain node-1 id --ignore-daemonsets
+kubectl get po -o wide
+
+kubetcl corden node-id 
+kubectl get po -o wide 
+kubectl get no 
+kubectl uncordon node-id
 
 
