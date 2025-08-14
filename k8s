@@ -579,7 +579,7 @@ kubectl describe po
 kubectl exec -it pvdeploy-5f5ffc94-qkd49 -- /bin/bash
 
 
-CONFIG MAG
+CONFIG-MAPS
 ====================================
 kubectl run pod1 --image mysql
 kubectl get po
@@ -601,5 +601,25 @@ kubectl describe cm dbvars
 kubectl get po (showing crashllookup)
 kubectl set env deploy swiggydb --from=cm/dbvars
 kubectl get po
+kubectl delete deploy swiggydb
+
+SECRETS (store sensitive data)
+=====================================
+TYPES
+1) generic
+2) TLS (transfer layser security)
+3) docker registry
+
+kubectl create deploy swiggydb --image=mariadb
+kubectl get po
+kubectl logs swiggydb-5f5586944c-t7cqn
+kubectl create secret generic password --from-literal=MYSQL_ROOT_PASSWORD=puru123
+kubectl get secret
+kubectl describe secret password
+kubectl get po
+kubectl set env deploy swiggydb --from=secret/password
+kubectl get po
+
+ 
 
 
