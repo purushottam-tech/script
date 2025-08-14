@@ -579,5 +579,27 @@ kubectl describe po
 kubectl exec -it pvdeploy-5f5ffc94-qkd49 -- /bin/bash
 
 
+CONFIG MAG
+====================================
+kubectl run pod1 --image mysql
+kubectl get po
+kubectl delete pod pod1
+
+kubectl create deploy swiggydb --image=mariadb
+kubectl get po
+kubectl logs swiggydb-5f5586944c-t7cqn
+kubectl set env deploy swiggydb MYSQL_ROOT_PASSWORD=Puru123 (for single value pass)
+
+for multiple value
+================
+vim varsfile
+MYSQL_ROOT_PASSWORD=Puru123
+MYSQL_USER=admin
+
+kubectl create cm dbvars --from-env-file=varsfile
+kubectl describe cm dbvars
+kubectl get po (showing crashllookup)
+kubectl set env deploy swiggydb --from=cm/dbvars
+kubectl get po
 
 
